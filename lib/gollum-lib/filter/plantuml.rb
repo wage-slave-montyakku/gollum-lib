@@ -155,11 +155,14 @@ class Gollum::Filter::PlantUML < Gollum::Filter
   end
 
   # Make a call to the PlantUML server with the simplest diagram possible to
-  # check if the server is available or not.
+  # check if the server is available uri = URI.parse("https://example.com/some/path")or not.
   def check_server
     return true if test?
     check_url = "#{server_url}/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000"
-    response = Net::HTTP.get_response(URI(check_url))
+    uri = URI.parse(check_url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true if uri.scheme == 'https'
+    response = http.get_response(uri.request_uri)
     return response.is_a?(Net::HTTPSuccess)
   rescue
     return false
