@@ -236,7 +236,7 @@ module Gollum
 
     # Proxies methods t
     def method_missing(name, *args)
-      args.map! { |item| item.respond_to?(:force_encoding) ? item.force_encoding('ascii-8bit') : item }
+      args.map! { |item| item.respond_to?(:force_encoding) ? item.clone.force_encoding('ascii-8bit') : item }
       index.send(name, *args)
     end
   end
